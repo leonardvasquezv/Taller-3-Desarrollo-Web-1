@@ -2,12 +2,12 @@ import firebase from "firebase/app";
 import 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBrQQ_UPG8E3dtnMYskMwdzu8D0B_mus94",
-  authDomain: "test-50805.firebaseapp.com",
-  projectId: "test-50805",
-  storageBucket: "test-50805.appspot.com",
-  messagingSenderId: "1071538730146",
-  appId: "1:1071538730146:web:ba803cdbfc3a73bdf253fb"
+  apiKey: "AIzaSyCg1C8v26YdCY9pVNlLeL3srDG-ds1Z_kc",
+  authDomain: "taller3-f3f9f.firebaseapp.com",
+  projectId: "taller3-f3f9f",
+  storageBucket: "taller3-f3f9f.appspot.com",
+  messagingSenderId: "275627251154",
+  appId: "1:275627251154:web:8daedaf384fdb76dc7a40b"
 };
 
 // Initialize Firebase

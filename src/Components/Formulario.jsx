@@ -2,7 +2,6 @@ import React from "react";
 import { nanoid } from "nanoid";
 import swal from "sweetalert"
 import { firebase } from './firebase'
-import imagenEmpleado from '../img/empleado2.png'
 
 const Formulario = () => {
   const [nombre, setNombre] = React.useState("");
@@ -10,12 +9,29 @@ const Formulario = () => {
   const [telefono, setTelefono] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [descripcion, setDescripcion] = React.useState("");
+  const [url, setURL] = React.useState("")
   const [id, setId] = React.useState("")
   const [listaCandidatos, setListaCandidatos] = React.useState([])
   const [modoEdicion, setModoEdicion] = React.useState(false)
   const [error, setError] = React.useState(null)
 
+
+
+  const obtenerImagenes = async () => {
+    let azar = parseInt(Math.random() * 100)
+    try {
+      const res = await fetch("https://picsum.photos/id/" + azar + "/500")
+      const url = await res.url
+      setURL(url)
+    } catch (error) {
+
+    }
+  }
+
+
   React.useEffect(() => {
+
+
     const obtenerDatos = async () => {
       try {
         const db = firebase.firestore()
@@ -30,9 +46,12 @@ const Formulario = () => {
       }
     }
     obtenerDatos();
+
   })
 
   const guardarEmpleado = async (e) => {
+
+
     e.preventDefault()
 
     if (!nombre.trim()) {
@@ -66,13 +85,13 @@ const Formulario = () => {
       })
       const db = firebase.firestore()
       const nuevoEmpleado = {
-        aNombre: nombre, aCedula: cedula, aTelefono: telefono, aEmail: email, aDescripcion: descripcion
+        aNombre: nombre, aCedula: cedula, aTelefono: telefono, aEmail: email, aDescripcion: descripcion, aFoto: url
       }
       await db.collection('candidatos').add(nuevoEmpleado)
 
       setListaCandidatos([
         ...listaCandidatos,
-        { id: nanoid(), aNombre: nombre, aCedula: cedula, aTelefono: telefono, aEmail: email, aDescripcion: descripcion }
+        { id: nanoid(), aNombre: nombre, aCedula: cedula, aTelefono: telefono, aEmail: email, aDescripcion: descripcion, aFoto: url }
       ])
 
       e.target.reset()
@@ -126,10 +145,10 @@ const Formulario = () => {
     try {
       const db = firebase.firestore()
       await db.collection('candidatos').doc(id).update({
-        aNombre: nombre, aCedula: cedula, aTelefono: telefono, aEmail: email, aDescripcion: descripcion
+        aNombre: nombre, aCedula: cedula, aTelefono: telefono, aEmail: email, aDescripcion: descripcion, aFoto: url
       })
       const arrayEditado = listaCandidatos.map(
-        item => item.id === id ? { id: id, aNombre: nombre, aCedula: cedula, aTelefono: telefono, aEmail: email, aDescripcion: descripcion } : item
+        item => item.id === id ? { id: id, aNombre: nombre, aCedula: cedula, aTelefono: telefono, aEmail: email, aDescripcion: descripcion, aFoto: url } : item
       )
       setListaCandidatos(arrayEditado)
       setId('')
@@ -185,9 +204,11 @@ const Formulario = () => {
   return (
     <div className="container mt-5">
       <h1 className="text-center row justify-content-center mb-5 colortexto">Test Psicotécnico B/N</h1>
-      <div className="formularioEmpleados row">
-        <div className="col-4 ladoFoto" style={{ backgroundImage: `url("https://picsum.photos/450?grayscale")` }}>
 
+      <div className="formularioEmpleados row">
+        <div className="col-4 ladoFoto">
+          <img src={url} alt="" />
+          <button className="btn btn-primary btn-block" onClick={() => obtenerImagenes()}>Cambiar Imagen</button>
         </div>
         <div className="col-8 justify-content-end ladoCajas">
           <form onSubmit={modoEdicion ? editarEmpleado : guardarEmpleado} className="text-center">
@@ -223,9 +244,11 @@ const Formulario = () => {
                   </>
                 )
                 :
-                <button className="btn btn-primary btn-block mt-4" type="submit">Agregar Registro</button>
-            }
+                <>
+                  <button className="btn btn-primary btn-block mt-4" type="submit">Agregar Registro</button>
+                </>
 
+            }
           </form>
         </div>
       </div>
@@ -233,13 +256,14 @@ const Formulario = () => {
       <div className="row mt-5">
         <div className="col-12">
           <h4 className="text-center mb-3 colortexto">Registros</h4>
-          <ul className="list-group" style={{ backgroundImage: `url("https://picsum.photos/1300/500?grayscale")` }}>
+          <ul className="list-group">
             {
               listaCandidatos.map(item => (
-                <li className="list-group-item listadoEmpleados" key={item.id}>
-                  <span className="lead">{item.aNombre} - {item.aCedula} - {item.aTelefono} - {item.aEmail} - {item.aDescripcion}</span>
-                  <button className="btn btn-danger btn-sm float-end mx-2" onClick={() => eliminar(item.id)}>Eliminar</button>
-                  <button className="btn btn-warning btn-sm float-end mx-2" onClick={() => editar(item)}>Editar</button>
+                <li className="list-group-item listadoEmpleados row" key={item.id}>
+                  <span className="lead col-8">{item.aNombre} - {item.aCedula} - {item.aTelefono} - {item.aEmail} - {item.aDescripcion}</span>
+                  <div className="col-1"><img src={item.aFoto} alt="" /></div>
+                  <button className="btn btn-danger btn-sm float-end mx-2 col-1" onClick={() => eliminar(item.id)}>Eliminar</button>
+                  <button className="btn btn-warning btn-sm float-end mx-2 col-1" onClick={() => editar(item)}>Editar</button>
                 </li>
               ))
             }
