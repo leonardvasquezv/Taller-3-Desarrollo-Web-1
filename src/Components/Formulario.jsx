@@ -206,9 +206,8 @@ const Formulario = () => {
       <h1 className="text-center row justify-content-center mb-5 colortexto">Test Psicotécnico B/N</h1>
 
       <div className="formularioEmpleados row">
-        <div className="col-4 ladoFoto">
-          <img src={url} alt="" />
-          <button className="btn btn-primary btn-block" onClick={() => obtenerImagenes()}>Cambiar Imagen</button>
+        <div className="col-4 ladoFoto" style={{backgroundImage: 'url(' + url + ')'}}>
+          <button className="btn btn-primary btn-block ibutton" onClick={() => obtenerImagenes()}>Cambiar Imagen</button>
         </div>
         <div className="col-8 justify-content-end ladoCajas">
           <form onSubmit={modoEdicion ? editarEmpleado : guardarEmpleado} className="text-center">
