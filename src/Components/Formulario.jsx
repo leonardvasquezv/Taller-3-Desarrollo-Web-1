@@ -4,12 +4,13 @@ import swal from "sweetalert"
 import { firebase } from './firebase'
 
 const Formulario = () => {
+  let azar1 = parseInt(Math.random() * 100)
   const [nombre, setNombre] = React.useState("");
   const [cedula, setCedula] = React.useState("");
   const [telefono, setTelefono] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [descripcion, setDescripcion] = React.useState("");
-  const [url, setURL] = React.useState("")
+  const [url, setURL] = React.useState("https://picsum.photos/id/" + azar1 + "/500")
   const [id, setId] = React.useState("")
   const [listaCandidatos, setListaCandidatos] = React.useState([])
   const [modoEdicion, setModoEdicion] = React.useState(false)
@@ -207,7 +208,7 @@ const Formulario = () => {
 
       <div className="formularioEmpleados row">
         <div className="col-4 ladoFoto" style={{backgroundImage: 'url(' + url + ')'}}>
-          <button className="btn btn-primary btn-block ibutton" onClick={() => obtenerImagenes()}>Cambiar Imagen</button>
+          <button className="ibutton" onClick={() => obtenerImagenes()}>Cambiar Imagen</button>
         </div>
         <div className="col-8 justify-content-end ladoCajas">
           <form onSubmit={modoEdicion ? editarEmpleado : guardarEmpleado} className="text-center">
@@ -260,7 +261,7 @@ const Formulario = () => {
               listaCandidatos.map(item => (
                 <li className="list-group-item listadoEmpleados row" key={item.id}>
                   <span className="lead col-8">{item.aNombre} - {item.aCedula} - {item.aTelefono} - {item.aEmail} - {item.aDescripcion}</span>
-                  <div className="col-1"><img src={item.aFoto} alt="" /></div>
+                  <div className="col-1"><img id="img-registro" src={item.aFoto} alt="" /></div>
                   <button className="btn btn-danger btn-sm float-end mx-2 col-1" onClick={() => eliminar(item.id)}>Eliminar</button>
                   <button className="btn btn-warning btn-sm float-end mx-2 col-1" onClick={() => editar(item)}>Editar</button>
                 </li>
